@@ -1,9 +1,7 @@
-I'd like some assistance with a PHP application that I'm working on.  This application uses Trongate v2.  
-
-Trongate v2 is a native PHP framework (no Composer, minimal third-party dependencies, snake_case naming conventions) built on a modular MVC architecture where everything — including core functionality like database access and validation — exists as a module.  The information below outlines the framework's core philosophy and key operational principles that will inform all subsequent guidance.
+Trongate v2 is a native PHP framework (no Composer, minimal third-party dependencies, snake_case naming conventions) built on a modular MVC architecture where everything — including core functionality like database access and validation — exists as a module. This file outlines the framework's core philosophy and key operational principles for AI reference.
 
 ================================================================================
-TRONGATE v2 - FRAMEWORK MEMORY FILE FOR OPENCLAW AI AGENT
+TRONGATE v2 - FRAMEWORK MEMORY FILE FOR AI AGENTS
 ================================================================================
 This file documents Trongate v2's internals with extreme brevity for AI accuracy.
 Each section is designed for quick lookup with zero ambiguity.
