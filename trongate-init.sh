@@ -25,6 +25,17 @@ cp "$SCAFFOLD_DIR/.claude/commands/commit.md" "$TARGET_DIR/.claude/commands/comm
 cp "$SCAFFOLD_DIR/.claude/commands/security-audit.md" "$TARGET_DIR/.claude/commands/security-audit.md"
 cp "$SCAFFOLD_DIR/.claude/commands/update-docs.md" "$TARGET_DIR/.claude/commands/update-docs.md"
 
+# Write .gitignore with preferred defaults (overwrites existing)
+cat > "$TARGET_DIR/.gitignore" << 'GITIGNORE'
+# Trongate config (environment-specific, never commit)
+config/
+config_*/
+
+# Trongate docs repo (cloned at runtime)
+_reference/trongate-docs-repo/
+GITIGNORE
+echo "Created .gitignore"
+
 # Fetch latest Trongate docs
 echo "Fetching latest Trongate docs..."
 if [ -d "$TARGET_DIR/_reference/trongate-docs-repo" ]; then

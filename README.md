@@ -39,47 +39,12 @@ Clone or download this repo to:
 ~/Documents/scripts/trongate-scaffold/
 ```
 
-### 2. Add the shell alias
+### 2. Add the shell aliases
 
 ```bash
-echo 'alias trongate-init="bash ~/Documents/scripts/trongate-scaffold/trongate-init.sh"' >> ~/.zshrc
+echo 'alias trongate-init="bash ~/Documents/scripts/trongate-claude-scaffold/trongate-init.sh"' >> ~/.zshrc
+echo 'alias trongate-init-tailwind="bash ~/Documents/scripts/trongate-claude-scaffold/trongate-init-tailwind.sh"' >> ~/.zshrc
 source ~/.zshrc
-```
-
-### 3. Set up your global gitignore
-
-This keeps Claude files out of your Trongate project repos without modifying their `.gitignore`:
-
-```bash
-cat > ~/.gitignore_global << 'EOF'
-# macOS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# IDE & Editor
-.phpintel/
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Misc
-*.bak
-*.tmp
-*.log
-
-# Local dev only (Claude scaffold files)
-_reference/
-.claude/
-CLAUDE.md
-EOF
-
-git config --global core.excludesfile ~/.gitignore_global
 ```
 
 ---
@@ -92,11 +57,33 @@ Navigate to the root of any new Trongate project and run:
 trongate-init
 ```
 
-This will:
+The `trongate-init` script will:
 - Create `CLAUDE.md` at the project root
 - Create `_reference/` with the memory file and templates
 - Create `.claude/commands/` with all slash commands
+- Overwrite `.gitignore` with preferred Trongate defaults (`config/`, `config_*/`, `_reference/trongate-docs-repo/`)
 - Clone the latest Trongate docs into `_reference/trongate-docs-repo/`
+
+If you want Tailwind CSS included, run this immediately after:
+
+```bash
+trongate-init-tailwind
+```
+
+The Tailwind script will:
+- Install Tailwind CSS v4 via npm
+- Create `public/css/app.css` as the global input file
+- Add a `watch:css` script to `package.json`
+- Run an initial build to generate `public/css/output.css`
+- Append `node_modules/` to `.gitignore` without overwriting it
+
+Then add this to your template `<head>`:
+
+```php
+<link rel="stylesheet" href="<?= BASE_URL ?>public/css/output.css">
+```
+
+Run `npm run watch:css` while developing. Commit `output.css` along with your other changes — no build step needed on the server.
 
 ---
 
