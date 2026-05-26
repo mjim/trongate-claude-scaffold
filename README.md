@@ -131,13 +131,7 @@ npm run watch:css
 
 The watcher regenerates `public/css/output.css` whenever you change a PHP file or any CSS source file.
 
-### Production
-
-```bash
-npm run build:css
-```
-
-Generates a minified `output.css`. Commit it along with your other changes - no build step needed on the server.
+No build step needed on the server.
 
 ### Customizing Styles
 

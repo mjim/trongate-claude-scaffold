@@ -137,7 +137,6 @@ const fs = require('fs');
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 pkg.scripts = pkg.scripts || {};
 pkg.scripts['watch:css'] = 'npx @tailwindcss/cli -i ./public/css/app.css -o ./public/css/output.css --watch';
-pkg.scripts['build:css'] = 'npx @tailwindcss/cli -i ./public/css/app.css -o ./public/css/output.css --minify';
 fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
 "
 echo "  Added watch:css and build:css scripts to package.json"
