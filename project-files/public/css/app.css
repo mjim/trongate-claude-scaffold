@@ -1,0 +1,40 @@
+/**
+ * app.css - Tailwind CSS entry point
+ *
+ * This file is the source CSS that Tailwind compiles into output.css.
+ * Run `npm run watch:css` to start the watcher.
+ */
+
+@import "tailwindcss";
+
+/* ============================================
+   DARK MODE TRIGGER
+   Activates dark variants when .dark class is on <html>
+   ============================================ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
+   FILE SCANNING
+   Tell Tailwind which Trongate files to scan for class names
+   Paths are relative to this file (public/css/)
+   ============================================ */
+
+@source "../../modules/**/*.php";
+@source "../../templates/**/*.php";
+
+/* ============================================
+   THEME TOKENS
+   ============================================ */
+
+@theme {
+  --font-sans: Tahoma, Geneva, sans-serif;
+}
+
+/* ============================================
+   COMPONENT STYLES
+   The trongate-tailwind.css file extends base styling
+   with Trongate-compatible classes plus modern patterns.
+   ============================================ */
+
+@import "./trongate-tailwind.css";
