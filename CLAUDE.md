@@ -71,6 +71,7 @@ This is a **Trongate PHP v2** application. Trongate has its own conventions that
 ## Core Trongate Rules
 
 - Modules live in `modules/[module_name]/`
+- Module names use lowercase snake_case — no hyphens, no `_module` suffix, no PascalCase
 - Controller sits directly in the module folder — no `controllers/` subfolder
 - Controller file: UppercaseFirst snake_case (e.g. `Teams.php`)
 - Class name matches filename without extension (e.g. `class Teams extends Trongate`)
@@ -102,13 +103,14 @@ Use these in order — only go deeper if the current level doesn't cover it:
 
 ## Workflow
 
-1. A spec is written first (`_reference/specs/FEATURE_NAME.md`)
-2. A plan is generated from the spec (`_reference/plans/FEATURE_NAME_plan.md`)
+1. A spec is written first (`_reference/specs/FEATURE_NAME.md`) — use `/new-spec [feature name]` to generate from the template
+2. A plan is generated from the spec (`_reference/plans/FEATURE_NAME_plan.md`) — use `/new-plan [spec filename]` to generate from the template
 3. Code is written following the plan, one task at a time
 4. Mark tasks complete in the plan as you go
 
 ## What to Avoid
 
+- No edits to `engine/` unless explicitly asked — that is the Trongate core, not a safe extension point
 - No `controllers/` subfolders — that is the old v1 pattern
 - No Composer installs — ever
 - No empty constructors calling `parent::__construct()`
