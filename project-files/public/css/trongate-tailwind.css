@@ -5,7 +5,7 @@
  * extended with modern UI patterns and dark mode support.
  *
  * Dark mode activates when <html> has the .dark class.
- * See dark-mode.js for the toggle implementation.
+ * See theme-toggle.js for the toggle implementation.
  */
 
 /* ============================================
