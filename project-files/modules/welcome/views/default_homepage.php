@@ -1,299 +1,271 @@
-<!-- Theme toggle in the top right corner -->
-<div style="position: fixed; top: 1em; right: 1em; z-index: 100;">
-    <button class="theme-toggle" onclick="toggleTheme()" data-tooltip="Toggle dark mode">
-        <span id="theme-icon">&#9788;</span>
-    </button>
-</div>
+<!--
+    Under-construction homepage.
+    Self-contained styling so it works regardless of the project's theme.
+    Honors the .dark class set by theme-toggle.js but defaults to a refined dark palette.
 
-<script>
-    // Update the icon based on current theme
-    document.addEventListener('DOMContentLoaded', function() {
-        const updateIcon = () => {
-            const icon = document.getElementById('theme-icon');
-            if (icon) {
-                icon.innerHTML = getTheme() === 'dark' ? '&#9789;' : '&#9788;';
-            }
-        };
-        updateIcon();
-        // Update icon when toggle is clicked
-        document.querySelector('.theme-toggle').addEventListener('click', () => {
-            setTimeout(updateIcon, 10);
-        });
-    });
-</script>
+    Optional constants (define in config/site_owner.php):
+      OUR_EMAIL_ADDRESS - contact email shown on the page
+      OUR_NAME          - company/site name shown in the footer
+    Both fall back to placeholder values if not defined.
+-->
 
-<h1 class="mt-2">Enjoy Trongate!</h1>
-<h2>The Native PHP Framework</h2>
-<p class="mt-2">You have successfully installed Trongate. You're now ready to start building fast, efficient web applications.</p>
+<style>
+    /* Scoped to the construction page via the .uc-page wrapper */
+    .uc-page {
+        --uc-bg: #0e1116;
+        --uc-bg-soft: #161b22;
+        --uc-line: rgba(255, 255, 255, 0.06);
+        --uc-text: #e6e1d8;
+        --uc-text-dim: #8a8f98;
+        --uc-accent: #e0a458;
+        --uc-accent-soft: rgba(224, 164, 88, 0.12);
 
-<div class="mt-3">
-    <?php
-    if (strtolower(ENV) === 'dev') {
-        echo anchor('trongate_administrators/manage', 'Admin Panel', ['class' => 'button']);
-    } else {
-        echo anchor('https://trongate.io', 'Visit Trongate.io', ['class' => 'button', 'target' => '_blank']);
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--uc-bg);
+        color: var(--uc-text);
+        overflow: hidden;
+        font-family: ui-sans-serif, "Helvetica Neue", Helvetica, sans-serif;
     }
-    echo anchor('https://trongate.io/docs', 'View Documentation', ['class' => 'button alt', 'target' => '_blank']);
-    ?>
-</div>
 
-<?php if (strtolower(ENV) === 'dev'): ?>
+    /* Import distinctive fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Archivo:wght@400;500;600&display=swap');
 
-<hr class="mt-5 mb-5">
+    .uc-page .uc-display {
+        font-family: "Fraunces", Georgia, serif;
+    }
 
-<div class="empty-state mb-3">
-    <h3>Component Showcase</h3>
-    <p>Below are the styled components available in this project. Try the theme toggle in the top right to see dark mode. Delete this section when you start building your real homepage.</p>
-</div>
+    .uc-page .uc-body-font {
+        font-family: "Archivo", ui-sans-serif, sans-serif;
+    }
 
-<h3>Buttons</h3>
-<div class="flex-row flex-wrap gap-1">
-    <button>Primary</button>
-    <button class="success">Success</button>
-    <button class="danger">Danger</button>
-    <button class="warning">Warning</button>
-    <button class="inverse">Inverse</button>
-    <button class="alt">Alternative</button>
-    <button disabled>Disabled</button>
-</div>
+    /* Animated blueprint grid background */
+    .uc-grid {
+        position: absolute;
+        inset: -2px;
+        background-image:
+            linear-gradient(var(--uc-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--uc-line) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 30%, transparent 80%);
+        -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 30%, transparent 80%);
+        animation: uc-grid-drift 22s linear infinite;
+    }
 
-<hr>
+    @keyframes uc-grid-drift {
+        from { transform: translate(0, 0); }
+        to   { transform: translate(44px, 44px); }
+    }
 
-<h3>Badges and Pills</h3>
-<div class="flex-row flex-wrap gap-1 mt-1">
-    <span class="badge">Default</span>
-    <span class="badge primary">Primary</span>
-    <span class="badge success">Active</span>
-    <span class="badge warning">Pending</span>
-    <span class="badge danger">Urgent</span>
-</div>
+    /* Soft glow behind the content */
+    .uc-glow {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        width: 640px;
+        height: 640px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, var(--uc-accent-soft) 0%, transparent 60%);
+        pointer-events: none;
+    }
 
-<div class="flex-row flex-wrap gap-1 mt-2">
-    <span class="pill">Default</span>
-    <span class="pill primary">New</span>
-    <span class="pill success">Live</span>
-    <span class="pill warning">Draft</span>
-    <span class="pill danger">Error</span>
-</div>
+    .uc-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 2rem;
+        max-width: 640px;
+    }
 
-<hr>
+    /* The animated build mark */
+    .uc-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 2rem;
+        border: 1px solid var(--uc-accent);
+        border-radius: 14px;
+        position: relative;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease forwards;
+    }
 
-<h3>Alerts</h3>
-<div class="alert alert-success">Your changes have been saved successfully.</div>
-<div class="alert alert-danger">Something went wrong. Please try again.</div>
-<div class="alert alert-warning">This action cannot be undone.</div>
-<div class="alert alert-info">A new version is available.</div>
+    .uc-mark::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 14px;
+        background: var(--uc-accent-soft);
+        animation: uc-pulse 2.8s ease-in-out infinite;
+    }
 
-<hr>
+    .uc-mark svg {
+        width: 30px;
+        height: 30px;
+        stroke: var(--uc-accent);
+        position: relative;
+        z-index: 1;
+    }
 
-<h3>Cards</h3>
-<div class="grid-3 gap-2 mt-2">
-    <div class="card">
-        <div class="card-heading">Default Card</div>
-        <div class="card-body">
-            <p>Standard card with the primary color heading.</p>
+    @keyframes uc-pulse {
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50%      { opacity: 0.9; transform: scale(1.08); }
+    }
+
+    .uc-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--uc-accent);
+        margin: 0 0 1.25rem 0;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.1s forwards;
+    }
+
+    .uc-title {
+        font-size: clamp(2.4rem, 6vw, 4rem);
+        line-height: 1.05;
+        font-weight: 600;
+        margin: 0 0 1.4rem 0;
+        letter-spacing: -0.02em;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.2s forwards;
+    }
+
+    .uc-title em {
+        font-style: italic;
+        color: var(--uc-accent);
+    }
+
+    .uc-sub {
+        font-size: 1.075rem;
+        line-height: 1.7;
+        color: var(--uc-text-dim);
+        margin: 0 auto 2.5rem auto;
+        max-width: 460px;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.3s forwards;
+    }
+
+    .uc-divider {
+        width: 48px;
+        height: 1px;
+        background: var(--uc-line);
+        margin: 0 auto 2.5rem auto;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.35s forwards;
+    }
+
+    .uc-contact {
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.45s forwards;
+    }
+
+    .uc-contact-label {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--uc-text-dim);
+        margin-bottom: 0.85rem;
+    }
+
+    .uc-contact a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.6rem;
+        border: 1px solid var(--uc-accent);
+        border-radius: 10px;
+        color: var(--uc-text);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .uc-contact a:hover {
+        background: var(--uc-accent);
+        color: #0e1116;
+        transform: translateY(-2px);
+    }
+
+    .uc-contact a svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .uc-footer {
+        position: absolute;
+        bottom: 1.75rem;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--uc-text-dim);
+        z-index: 2;
+        opacity: 0;
+        animation: uc-fade-up 0.7s ease 0.6s forwards;
+    }
+
+    @keyframes uc-fade-up {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 550px) {
+        .uc-content { padding: 1.5rem; }
+    }
+</style>
+
+<?php
+    // Pull site owner details from constants. These may be defined but empty
+    // in a default setup, so fall back whenever the value is blank.
+    $uc_email = (defined('OUR_EMAIL_ADDRESS') && OUR_EMAIL_ADDRESS !== '') ? OUR_EMAIL_ADDRESS : 'hello@example.com';
+    $uc_name  = (defined('OUR_NAME') && OUR_NAME !== '') ? OUR_NAME : 'Your Company';
+?>
+
+<div class="uc-page uc-body-font">
+    <div class="uc-grid"></div>
+    <div class="uc-glow"></div>
+
+    <div class="uc-content">
+        <div class="uc-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18" />
+                <path d="M5 21V7l8-4v18" />
+                <path d="M19 21V11l-6-4" />
+                <path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01" />
+            </svg>
+        </div>
+
+        <p class="uc-eyebrow">Coming Soon</p>
+
+        <h1 class="uc-title uc-display">Something great is <em>under construction</em></h1>
+
+        <p class="uc-sub">We are putting the finishing touches on our new home. Check back shortly, or reach out if you would like to be the first to know when we launch.</p>
+
+        <div class="uc-divider"></div>
+
+        <div class="uc-contact">
+            <span class="uc-contact-label">Get in touch</span>
+            <a href="mailto:<?= $uc_email ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-10 5L2 7" />
+                </svg>
+                <?= $uc_email ?>
+            </a>
         </div>
     </div>
-    <div class="card">
-        <div class="card-heading success">Success Card</div>
-        <div class="card-body">
-            <p>Card with a success-colored heading.</p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-heading danger">Danger Card</div>
-        <div class="card-body">
-            <p>Card with a danger-colored heading.</p>
-        </div>
+
+    <div class="uc-footer">
+        &copy; <?= date('Y') ?> <?= $uc_name ?>. All rights reserved.
     </div>
 </div>
-
-<hr>
-
-<h3>Elevation Scale</h3>
-<div class="grid-auto gap-2 mt-2">
-    <div class="card-body elev-1 text-center">elev-1</div>
-    <div class="card-body elev-2 text-center">elev-2</div>
-    <div class="card-body elev-3 text-center">elev-3</div>
-    <div class="card-body elev-4 text-center">elev-4</div>
-    <div class="card-body elev-5 text-center">elev-5</div>
-</div>
-
-<hr>
-
-<h3>Tables</h3>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>001</td>
-            <td>Sample Item One</td>
-            <td><span class="pill success">Active</span></td>
-            <td>2026-01-15</td>
-        </tr>
-        <tr>
-            <td>002</td>
-            <td>Sample Item Two</td>
-            <td><span class="pill warning">Pending</span></td>
-            <td>2026-01-18</td>
-        </tr>
-        <tr>
-            <td>003</td>
-            <td>Sample Item Three</td>
-            <td><span class="pill danger">Inactive</span></td>
-            <td>2026-01-22</td>
-        </tr>
-        <tr>
-            <td>004</td>
-            <td>Sample Item Four</td>
-            <td><span class="pill primary">New</span></td>
-            <td>2026-01-25</td>
-        </tr>
-    </tbody>
-</table>
-
-<hr>
-
-<h3>Forms</h3>
-<div class="grid-2 gap-3 mt-2">
-    <div>
-        <div class="field">
-            <label>Text Input</label>
-            <input type="text" placeholder="Enter some text">
-            <div class="field-help">A standard text input with help text below.</div>
-        </div>
-        <div class="field">
-            <label>Email</label>
-            <input type="email" placeholder="you@example.com">
-        </div>
-        <div class="field">
-            <label>Dropdown</label>
-            <select>
-                <option>Choose an option</option>
-                <option>Option One</option>
-                <option>Option Two</option>
-                <option>Option Three</option>
-            </select>
-        </div>
-        <div class="field">
-            <label>Textarea</label>
-            <textarea placeholder="Enter a longer message..." rows="3"></textarea>
-        </div>
-    </div>
-    <div>
-        <div class="field">
-            <label>Field with Error</label>
-            <input type="text" class="form-field-validation-error" value="Invalid input">
-            <div class="field-error">This field is required.</div>
-        </div>
-        <div class="field">
-            <label>Input Group (Currency)</label>
-            <div class="input-group">
-                <span class="input-group-addon">$</span>
-                <input type="number" placeholder="0.00">
-                <span class="input-group-addon">.00</span>
-            </div>
-        </div>
-        <div class="field">
-            <label>Date Picker</label>
-            <input type="date">
-        </div>
-        <div class="field">
-            <label>
-                <input type="checkbox"> Checkbox option
-            </label>
-            <label>
-                <input type="radio" name="demo-radio"> Radio option one
-            </label>
-            <label>
-                <input type="radio" name="demo-radio"> Radio option two
-            </label>
-        </div>
-    </div>
-</div>
-
-<hr>
-
-<h3>Breadcrumbs</h3>
-<nav class="breadcrumbs">
-    <a href="#">Home</a>
-    <span class="separator">/</span>
-    <a href="#">Section</a>
-    <span class="separator">/</span>
-    <span class="current">Current Page</span>
-</nav>
-
-<h3 class="mt-3">Pagination</h3>
-<div class="pagination">
-    <a href="#">&laquo;</a>
-    <a href="#">1</a>
-    <a href="#" class="active">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">&raquo;</a>
-</div>
-
-<h3 class="mt-3">Tabs</h3>
-<div class="tabs">
-    <a class="tab active">Overview</a>
-    <a class="tab">Details</a>
-    <a class="tab">Settings</a>
-</div>
-<div class="tab-panel active">
-    <p>This is the active tab panel content. Add JavaScript to toggle between panels.</p>
-</div>
-
-<hr>
-
-<h3>Tooltips</h3>
-<p>Hover over the items below to see CSS-only tooltips.</p>
-<div class="flex-row gap-3 mt-1">
-    <span data-tooltip="This is a helpful tooltip">Hover for info</span>
-    <span data-tooltip="Click to learn more">Another tooltip</span>
-    <span data-tooltip="No JavaScript required">Pure CSS</span>
-</div>
-
-<hr>
-
-<h3>Loading States</h3>
-<div class="flex-row gap-3 align-center mt-2">
-    <div class="spinner"></div>
-    <span>Loading content...</span>
-</div>
-
-<div class="card mt-3">
-    <div class="card-body">
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-line"></div>
-    </div>
-</div>
-
-<hr>
-
-<h3>Brand Colors</h3>
-<div class="grid-auto gap-1 mt-2">
-    <div class="bg-primary p-1 text-center">bg-primary</div>
-    <div class="bg-secondary p-1 text-center">bg-secondary</div>
-    <div class="bg-success p-1 text-center">bg-success</div>
-    <div class="bg-danger p-1 text-center">bg-danger</div>
-    <div class="bg-warning p-1 text-center">bg-warning</div>
-    <div class="bg-info p-1 text-center">bg-info</div>
-    <div class="bg-neutral p-1 text-center">bg-neutral</div>
-    <div class="bg-inverse p-1 text-center">bg-inverse</div>
-</div>
-
-<div class="mt-3 text-center text-muted">
-    <p>End of component showcase. Delete this section when you're ready to build your real homepage.</p>
-</div>
-
-<?php endif; ?>

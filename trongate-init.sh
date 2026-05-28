@@ -123,15 +123,24 @@ else
   echo "           You may need to manually update your template to load output.css"
 fi
 
-# Replace the welcome page with our showcase version
+# Replace the welcome module: controller + under-construction page + showcase view
 if [ -d "$TARGET_DIR/modules/welcome/views" ]; then
+  # Controller sits directly in the module folder (Trongate v2 - no controllers/ subfolder)
+  cp "$SCAFFOLD_DIR/project-files/modules/welcome/Welcome.php" "$TARGET_DIR/modules/welcome/Welcome.php"
+  echo "  Updated modules/welcome/Welcome.php (adds /welcome/components route)"
+
+  # Under-construction homepage (shows by default in all environments)
   cp "$SCAFFOLD_DIR/project-files/modules/welcome/views/default_homepage.php" "$TARGET_DIR/modules/welcome/views/default_homepage.php"
-  echo "  Updated modules/welcome/views/default_homepage.php (with component showcase)"
+  echo "  Updated modules/welcome/views/default_homepage.php (under-construction page)"
+
+  # Component showcase (lives at /welcome/components)
+  cp "$SCAFFOLD_DIR/project-files/modules/welcome/views/components_showcase.php" "$TARGET_DIR/modules/welcome/views/components_showcase.php"
+  echo "  Created modules/welcome/views/components_showcase.php (showcase at /welcome/components)"
 else
-  echo "  WARNING: modules/welcome/views/ not found. Skipping welcome page replacement."
+  echo "  WARNING: modules/welcome/views/ not found. Skipping welcome module replacement."
 fi
 
-# Add watch and build scripts to package.json
+# Add watch script to package.json
 node -e "
 const fs = require('fs');
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -139,7 +148,7 @@ pkg.scripts = pkg.scripts || {};
 pkg.scripts['watch:css'] = 'npx @tailwindcss/cli -i ./public/css/app.css -o ./public/css/output.css --watch';
 fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
 "
-echo "  Added watch:css and build:css scripts to package.json"
+echo "  Added watch:css script to package.json"
 
 # Run initial build to generate output.css
 echo ""
@@ -159,15 +168,17 @@ echo "Your Trongate project is ready with:"
 echo "  - Claude scaffold (CLAUDE.md, slash commands, reference docs)"
 echo "  - Tailwind CSS v4 with custom Trongate-compatible styles"
 echo "  - Dark mode support with theme toggle"
-echo "  - Component showcase on welcome page (dev env only)"
+echo "  - Under-construction homepage (shown by default)"
+echo "  - Component showcase at /welcome/components"
 echo ""
 echo "Next steps:"
 echo "  1. Run 'npm run watch:css' while developing"
-echo "  2. Visit your homepage to see the component showcase"
-echo "  3. Try the theme toggle in the top-right corner"
+echo "  2. Visit /welcome/components to see the component reference"
+echo "  3. Edit the under-construction page: update the contact email"
+echo "     and company name in modules/welcome/views/default_homepage.php"
 echo "  4. Commit output.css along with your other changes"
 echo ""
-echo "To customize:"
+echo "To customize styles:"
 echo "  - Edit CSS variables in public/css/trongate-tailwind.css"
 echo "  - Component styles live in @layer components block"
 echo "  - Dark mode overrides live in the .dark block"
