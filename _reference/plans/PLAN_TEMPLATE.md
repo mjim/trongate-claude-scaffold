@@ -7,6 +7,18 @@
 ## Summary
 One paragraph describing what this plan implements and why.
 
+## Branch
+Before starting any tasks, create a new branch under the `feature/` subfolder.
+
+- **Branch name:** `feature/[short-feature-slug]`
+- Create it from an up-to-date `main` (or your base branch):
+  ```bash
+  git checkout main
+  git pull
+  git checkout -b feature/[short-feature-slug]
+  ```
+- All work for this plan happens on this branch. Do not commit directly to the base branch.
+
 ## Affected Files
 List every file that will be created or modified.
 
@@ -37,4 +49,5 @@ List every file that will be created or modified.
 ## Notes
 Anything Claude or the developer should know while implementing this plan.
 
-- 
+- Once Phase 4 passes, merge this branch via pull request into the base branch, then delete the feature branch.
+-
